@@ -14,6 +14,6 @@ inside the root folder.
 ### Authors
 
 * **Eugeniy Fiyas** - *Initial work, Backend* - [evgeniyfiyas](https://github.com/evgeniyfiyas)
-* **Artyom Kozel** - *Backend*
+* **Artyom Kozel** - *Backend* - [kozelartem](https://github.com/kozelartem)
 * **Nikita Manzhula** - *Frontend*
-* **Misha Lysiuk** - *Frontend*
+* **Misha Lysiuk** - *Frontend* - [mishalysiuk](https://github.com/mishalysiuk)
