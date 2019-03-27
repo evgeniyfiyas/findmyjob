@@ -13,7 +13,14 @@ module.exports = {
         "name": "user",
         "description": "Operations about user"
       }
-    ]
+    ],
+    "securityDefinitions": {
+      "bearer-auth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      },
+    },
   },
   "apis": ['./routes/api.js']
 };

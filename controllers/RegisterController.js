@@ -4,20 +4,6 @@ const config = require(__dirname + '/../config/app-config');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
-
-exports.getById = function (req, res) {
-  models.User.findByPk(req.params.id).then(user => {
-    if (user == null) {
-      return res.status(422).json({ errors: [{
-        title: "User does not exist",
-      }]});
-    }
-    else {
-      return res.status(200).json(user);
-    }
-  });
-};
-
 exports.register = function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -36,7 +22,7 @@ exports.register = function (req, res) {
   });
 };
 
-exports.registerValidate = [
+exports.validate = [
   check('email')
     .trim()
     .normalizeEmail()

@@ -6,6 +6,8 @@ var logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerConfig = require('./config/swagger-config');
 var swaggerUi = require('swagger-ui-express');
+const passport = require('passport');
+require('./passport')
 
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
@@ -19,8 +21,10 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
+app.use(passport.initialize());
+
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

@@ -1,3 +1,4 @@
 {
-  "userPasswordSaltRounds": 12
+  "userPasswordSaltRounds": 12,
+  "jwtsecret": "mysecret"
 }
