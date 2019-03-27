@@ -2,7 +2,32 @@ var express = require('express');
 var router = express.Router();
 var registerController = require('../controllers/RegisterController');
 var loginController = require('../controllers/LoginController');
+var userController = require('../controllers/UserController');
 const passport = require('../passport');
+
+/**
+ * @swagger
+ *
+ * /user/activate/{activation_id}:
+ *   get:
+ *     tags:
+ *       - user
+ *     description: Activate user's account.
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: activation_id
+ *         description: User's personal activation string.
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *      200:
+ *        description: "Account activated."
+ *      400:
+ *        description: "Invalid activation string or account already activated."
+ */
+router.get('/user/activate/:activation_id', userController.activate);
 
 /**
  * @swagger
