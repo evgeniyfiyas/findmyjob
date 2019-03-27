@@ -21,6 +21,14 @@ passport.use(new BearerStrategy(
   }
 ));
 
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 exports.authenticated = function(req, res, next){
   passport.authenticate('bearer', { session: false }, function(err, user, info) {
     if (err) { return next(err) }
@@ -34,11 +42,3 @@ exports.authenticated = function(req, res, next){
 
   })(req, res, next)
 };
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user);
-});

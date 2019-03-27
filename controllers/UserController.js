@@ -13,5 +13,30 @@ exports.activate = function (req, res, next) {
   }).catch(err => {
     return res.status(400).json({ errors: 'Invalid activation string' });
   });
+}
 
+exports.update = function (req, res, next) {
+  // TODO: Integrate with mongoDB UserProfile model and update it here
+  return models.User.findOne({
+    where: { id: req.user.id }
+  }).then(user => {
+    user.update({
+      password: req.body.password || user.password
+    }).then(() => {
+      return res.status(200).json({ data: 'User profile updated.' })
+    });
+  }).catch(err => {
+    return res.status(500).json({ errors: 'Error updating user profile' });
+  });
+}
+
+exports.show = function (req, res, next) {
+  // TODO: Integrate with mongoDB UserProfile model and show it here
+  return models.User.findOne({
+    where: { id: req.user.id }
+  }).then(user => {
+      return res.status(200).json({ user })
+  }).catch(err => {
+    return res.status(500).json({ errors: 'Error fetching user profile' });
+  });
 }

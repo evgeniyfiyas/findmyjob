@@ -10,16 +10,10 @@ exports.register = function (req, res) {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  bcrypt.hash(req.body.password, config.userPasswordSaltRounds, function (err, hash) {
-    models.User.create({
+  models.User.create({
       email: req.body.email,
-      password: hash,
-      status: 0,
-      activation: crypto.randomBytes(20).toString('hex'),
-    }).then(user => {
-      return res.status(200).json({ data: 'User created' });
-    });
-  });
+      password: req.body.password,
+  }).then(user => { return res.status(200).json({ data: 'User created' }) });
 };
 
 exports.validate = [
