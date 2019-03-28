@@ -46,7 +46,8 @@ router.post('/user', registerController.validate, registerController.register);
  *   get:
  *     tags:
  *       - user
- *     summary: Get user's profile
+ *       - userProfile
+ *     summary: Get user's profile and full info
  *     produces:
  *       - application/json
  *     responses:
