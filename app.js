@@ -7,6 +7,7 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerConfig = require('./config/swagger-config');
 var swaggerUi = require('swagger-ui-express');
 const passport = require('passport');
+const mysqldb = require('./models/mysql-models/index');
 require('./passport')
 
 var indexRouter = require('./routes/index');
@@ -25,6 +26,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(passport.initialize());
 
+// Catch mysql connection error
+app.use(function(req, res, next) {
+  mysqldb
+  .sequelize
+  .authenticate()
+  .then(next())
+  .catch(err => {
+    res.status(500).json({errors: "Can't connect to database!"});
+  });
+})
 
 app.use('/', indexRouter);
 app.use('/api', apiRouter);

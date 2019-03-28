@@ -7,6 +7,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const sequelizerc = require(__dirname + '/../../.sequelizerc');
 const config = require(sequelizerc.config)[env];
+const createError = require('http-errors');
 
 
 const db = {};
