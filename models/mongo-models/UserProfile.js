@@ -1,7 +1,7 @@
 'use strict';
 
-const db = require("../../db/mongoDb");
-const mongoConfig = require("../../migrations/migrate-mongo-config");
+const db = require("./mongoDb");
+const mongoConfig = require("../../config/migrate-mongo-config");
 
 exports.connect = () => {
   db.connect(mongoConfig.mongodb.url, (err) => {
