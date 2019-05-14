@@ -21,7 +21,7 @@ exports.login = function (req, res, next) {
           return res.status(403).json({ errors: 'Account is not activated.' });
         } else {
           let token = jwt.encode(user, config.jwtsecret);
-          return res.status(200).json({ token: token });
+          return res.status(200).json({ msg: "ok", token: token });
         }
       } else {
         return res.status(401).json({ errors: 'Incorrect email or password' });

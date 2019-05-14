@@ -8,12 +8,18 @@ const swaggerConfig = require('./config/swagger-config');
 var swaggerUi = require('swagger-ui-express');
 const passport = require('passport');
 const mysqldb = require('./models/mysql-models/index');
-require('./passport')
+var cors = require('cors')
+require('./nodemailer');
+require('./passport');
 
+// including routers
 var indexRouter = require('./routes/index');
 var apiRouter = require('./routes/api');
 
 var app = express();
+
+// enabling cors
+app.use(cors({credentials: true, origin: true}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
