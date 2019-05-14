@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "migrate": "migrate-mongo -f ./migrations/migrate-mongo-config.js"
+    "migrate": "migrate-mongo -f ./config/migrate-mongo-config.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.5",
