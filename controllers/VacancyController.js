@@ -10,7 +10,6 @@ exports.store = function (req, res) {
       id: req.user.id
     }
   }).then(user => {
-
     // getting logo filename
     let logo_filename;
     if (req.file == undefined) {
@@ -18,7 +17,21 @@ exports.store = function (req, res) {
     } else {
       logo_filename = req.file.filename;
     }
-
+    let data = {
+      _id: new mongoose.Types.ObjectId(),
+      user_created_id: req.user.id,
+      email: req.body.email,
+      location: req.body.location,
+      logo: 'http://' + host + '/api/uploads/' + logo_filename,
+      header: req.body.header,
+      technology: req.body.technology === undefined ? "" : {
+        name: req.body.name,
+        level: req.body.technology.level
+      },
+      body: req.body.body,
+      experience_required: req.body.experience_required,
+    };
+    console.log(data);
     let vacancy = new Vacancy({
       _id: new mongoose.Types.ObjectId(),
       user_created_id: req.user.id,
@@ -26,7 +39,10 @@ exports.store = function (req, res) {
       location: req.body.location,
       logo: 'http://' + host + '/api/uploads/' + logo_filename,
       header: req.body.header,
-      technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
+      technology: req.body.technology === undefined ? "" : [{
+        name: req.body.name,
+        level: req.body.technology.level
+      }],
       body: req.body.body,
       experience_required: req.body.experience_required,
     });
@@ -35,6 +51,7 @@ exports.store = function (req, res) {
       msg: 'ok'
     });
   }).catch(err => {
+    console.error(err);
     return res.status(500).json({
       errors: 'Error storing vacancy'
     });
@@ -95,10 +112,27 @@ exports.index = function (req, res) {
 
 exports.filter = function (req, res) {
   let filter = {};
-  req.body.technology ? filter.technology = JSON.parse(req.body.technology) : '';
   req.body.location ? filter.location = req.body.location : '';
-  req.body.experience ? filter.experience = req.body.experience : '';
+  req.body.experience_required ? filter.experience_required = req.body.experience_required : '';
   Vacancy.find(filter).then(vacancies => {
+    if (req.body.technology) {
+      let result = [];
+      filter.technology = req.body.technology;
+      vacancies.forEach(el => {
+        let find = false;
+        el.technology.forEach(tech => {
+          for (let i = 0; i < filter.technology.length; i++) {
+            if (!find && tech.name === filter.technology[i].name && tech.level === filter.technology[i].level) {
+              result.push(el);
+              find = true;
+            }
+          }
+        })
+      })
+      return result;
+    }
+    return vacancies;
+  }).then(vacancies => {
     if (vacancies.length > 0) {
       res.status(200).json(vacancies);
     } else {
@@ -118,9 +152,10 @@ exports.search = function (req, res) {
   Vacancy.find().then(vacancies => {
     let result = [];
     vacancies.forEach(el => {
-      if (el.header.contains(query) || el.body.contains(query))
+      if (el.header.indexOf(query) > 0 || el.body.indexOf(query) > 0)
         result.push(el);
     })
+    console.log(result);
     return result;
   }).then(vacancies => {
     if (vacancies.length > 0) {

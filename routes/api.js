@@ -403,6 +403,36 @@ router.get('/vacancy', passport.authenticated, vacancyController.index);
  *     summary: Show all vacancies by selected filters
  *     produces:
  *       - application/json
+ * /**
+ * @swagger
+ *
+ * /vacancy:
+ *   get:
+ *     tags:
+ *       - vacancy
+ *     summary: Show all vacancies
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: location
+ *         description: Location of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: string    
+ *       - name: experience_required
+ *         description: experience required.
+ *         in: formData
+ *         required: false
+ *         type: boolean
+ *       - name: technology
+ *         description: Technologies that vacancy requires.
+ *         in: formData
+ *         type: object
+ *         properties:
+ *          name:
+ *            type: string
+ *          level:
+ *            type: string
  *     responses:
  *      200:
  *        description: "Query OK."
@@ -419,7 +449,7 @@ router.post('/vacancy/filter', passport.authenticated, vacancyController.filter)
 /**
  * @swagger
  *
- * /vacancy/search:
+ * /vacancy/search?{search}:
  *   get:
  *     tags:
  *       - vacancy
