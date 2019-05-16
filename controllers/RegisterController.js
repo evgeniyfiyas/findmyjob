@@ -7,6 +7,8 @@ const config = require(__dirname + '/../config/app-config');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 var mailer = require('../nodemailer');
+const User = require('../models/mongo-models/user');
+
 
 exports.register = function(req, res) {
   const errors = validationResult(req);
@@ -32,12 +34,28 @@ exports.register = function(req, res) {
       else
         console.log(info);
     });
+    
+    let userProfile = new User({
+      _id: user.id,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      avatar: "null",
+      age: req.body.age,
+      phone: req.body.phone,
+      technology: JSON.parse(req.body.technology),
+      github_link: req.body.github_link,
+      bio: req.body.bio,
+      location: "null",
+      looking_for_job: req.body.looking_for_job,
+    });
+    userProfile.save();
 
     return res.status(200).json({
       data: 'User created',
       activation_token: user.activation
-    })
+    });
   });
+
 };
 
 exports.validate = [

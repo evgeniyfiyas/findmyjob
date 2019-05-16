@@ -1,5 +1,5 @@
 const models = require('../models/mysql-models');
-const mongoModels = require('../models/mongo-models/UserProfile');
+const User = require('../models/mongo-models/user');
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -18,40 +18,50 @@ exports.activate = function (req, res, next) {
 }
 
 exports.update = function (req, res) {
-  // TODO: Integrate with mongoDB UserProfile model and update it here
-  mongoModels.UserProfile.findById(req.user.id, (err, data) => {
-    if (err) {
-      return res.status(500).json({ errors: 'Error updating user profile'});
-    }
-  });
-  return models.User.findOne({
+  models.User.findOne({
     where: { id: req.user.id }
-  }).then(user => {
-    user.update({
-      password: req.body.password || user.password
-    }).then(() => {
-      return res.status(200).json({ data: 'User profile updated.' })
+  }).then(credentials => {
+    credentials.update({
+      password: req.body.password || credentials.password
+    }).then(credentials => {
+      User.findOneAndUpdate({
+        _id: credentials.id,
+      },
+      {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        avatar: req.body.avatar,
+        age: req.body.age,
+        phone: req.body.phone,
+        technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
+        github_link: req.body.github_link,
+        bio: req.body.bio,
+        location: req.body.location,
+        looking_for_job: req.body.looking_for_job,
+        created_vacancies: req.body.created_vacancies === undefined ? "" : JSON.parse(req.body.created_vacancies)
+      },
+      {
+        omitUndefined: true,
+      }, function(error, result){
+        return res.status(200).json({ data: 'User profile updated.' });
+      });
+    }).catch(err => {
+      return res.status(500).json({ errors: 'Error updating user profile' });
     });
-  }).catch(err => {
-    return res.status(500).json({ errors: 'Error updating user profile' });
   });
-}
+};
 
 exports.show = function (req, res) {
-  // CV from mongo
-  let account;
-  mongoModels.UserProfile.findById(req.user.id, (err, data)=> {
-    if(err) {
-      return console.log(err);
-    }
-    account = data;
-  });
-  // TODO: Integrate with mongoDB UserProfile model and show it here
-  return models.User.findOne({
+  models.User.findOne({
     where: { id: req.user.id }
   }).then(user => {
-      return res.status(200).json({ user, account })
+    let credentials = user.dataValues;
+    User.findById(user.id, function (err, profile) {
+      return res.status(200).json({credentials, profile});
+    });
+
   }).catch(err => {
+    console.log(err);
     return res.status(500).json({ errors: 'Error fetching user profile' });
   });
 }

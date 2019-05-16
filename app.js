@@ -8,6 +8,7 @@ const swaggerConfig = require('./config/swagger-config');
 var swaggerUi = require('swagger-ui-express');
 const passport = require('passport');
 const mysqldb = require('./models/mysql-models/index');
+const mongoose = require('mongoose');
 var cors = require('cors')
 require('./nodemailer');
 require('./passport');
@@ -41,6 +42,11 @@ app.use(function(req, res, next) {
   .catch(err => {
     res.status(500).json({errors: "Can't connect to database!"});
   });
+})
+// Mongo db connection
+mongoose.connect(require('./config/migrate-mongo-config').fullPath, { useNewUrlParser: true }, err => {
+  if (err) return console.error(err);
+  console.log("Successfully connected to mongodb");
 })
 
 app.use('/', indexRouter);

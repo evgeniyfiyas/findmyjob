@@ -3,6 +3,7 @@ var router = express.Router();
 var registerController = require('../controllers/RegisterController');
 var loginController = require('../controllers/LoginController');
 var userController = require('../controllers/UserController');
+var technologySeeder = require('../seeders/mongodb-seeders/demo-technologies');
 const passport = require('../passport');
 
 /**
@@ -31,6 +32,55 @@ const passport = require('../passport');
  *         in: formData
  *         required: true
  *         type: string
+ *       - name: firstname
+ *         description: User's first name.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: lastname
+ *         description: User's last name.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: age
+ *         description: User's age.
+ *         in: formData
+ *         required: true
+ *         type: integer
+ *       - name: phone
+ *         description: User's phone.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: technologies
+ *         description: Technologies that user knows.
+ *         in: formData
+ *         type: object
+ *         properties:
+ *          name:
+ *            type: string
+ *          level:
+ *            type: string
+ *       - name: github_link
+ *         description: User's github link.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: bio
+ *         description: User's bio.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: location
+ *         description: User's location.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: looking_for_job
+ *         description: User's looking for job status.
+ *         in: formData
+ *         required: true
+ *         type: boolean
  *     responses:
  *      200:
  *        description: "User created"
@@ -143,6 +193,12 @@ router.get('/user/activate/:activation_id', userController.activate);
  *        description: "Internal server error."
  */
 router.post('/user/login', loginController.validate, loginController.login);
+
+
+
+/* Routes to seed mongo database */
+router.get('/seed/technologies/up', technologySeeder.up);
+router.get('/seed/technologies/down', technologySeeder.down);
 
 
 module.exports = router;

@@ -8,12 +8,10 @@ module.exports = {
     },
     "host": "localhost:3000",
     "basePath": "/api",
-    "tags": [
-      {
-        "name": "user",
-        "description": "Operations about user"
-      }
-    ],
+    "tags": [{
+      "name": "user",
+      "description": "Operations about user"
+    }],
     "securityDefinitions": {
       "bearer-auth": {
         "type": "apiKey",
