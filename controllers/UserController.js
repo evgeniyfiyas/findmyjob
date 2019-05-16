@@ -1,5 +1,6 @@
 const models = require('../models/mysql-models');
 const User = require('../models/mongo-models/user');
+const Vacancy = require('../models/mongo-models/vacancy');
 
 const bcrypt = require('bcrypt');
 const passport = require('passport');
@@ -38,7 +39,6 @@ exports.update = function (req, res) {
         bio: req.body.bio,
         location: req.body.location,
         looking_for_job: req.body.looking_for_job,
-        created_vacancies: req.body.created_vacancies === undefined ? "" : JSON.parse(req.body.created_vacancies)
       },
       {
         omitUndefined: true,
@@ -63,5 +63,20 @@ exports.show = function (req, res) {
   }).catch(err => {
     console.log(err);
     return res.status(500).json({ errors: 'Error fetching user profile' });
+  });
+}
+
+exports.createdVacancies = function (req, res, next) {
+  Vacancy.find({
+    user_created_id: req.user.id
+  }, function (err, vacancies) {
+    if (vacancies == []) {
+      return res.status(204).json();
+    }
+    else {
+      return res.status(200).json(vacancies);
+    }
+  }).catch(err => {
+    return res.status(500).json({ errors: "Internal Server Error." });
   });
 }

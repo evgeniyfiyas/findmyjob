@@ -15,7 +15,6 @@ const userSchema = mongoose.Schema({
   bio: String,
   location: String,
   looking_for_job: Boolean,
-  created_vacancies: []
 });
 
 module.exports = mongoose.model('User', userSchema);

@@ -3,6 +3,7 @@ var router = express.Router();
 var registerController = require('../controllers/RegisterController');
 var loginController = require('../controllers/LoginController');
 var userController = require('../controllers/UserController');
+var vacancyController = require('../controllers/VacancyController');
 var technologySeeder = require('../seeders/mongodb-seeders/demo-technologies');
 const passport = require('../passport');
 
@@ -52,7 +53,7 @@ const passport = require('../passport');
  *         in: formData
  *         required: true
  *         type: string
- *       - name: technologies
+ *       - name: technology
  *         description: Technologies that user knows.
  *         in: formData
  *         type: object
@@ -193,6 +194,191 @@ router.get('/user/activate/:activation_id', userController.activate);
  *        description: "Internal server error."
  */
 router.post('/user/login', loginController.validate, loginController.login);
+
+/**
+ * @swagger
+ *
+ * /user/vacancies:
+ *   get:
+ *     tags:
+ *       - user
+ *     summary: Get vacancies created by user
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Query OK."
+ *      204:
+ *        description: "No vacancies found."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/user/vacancies', passport.authenticated, userController.createdVacancies);
+
+
+/**
+ * @swagger
+ *
+ * /vacancy:
+ *   post:
+ *     tags:
+ *       - vacancy
+ *     summary: Create new vacancy
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: header
+ *         description: Header of vacancy.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: body
+ *         description: Body text of vacancy.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: logo
+ *         description: Logo of vacancy.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: location
+ *         description: Location of vacancy.
+ *         in: formData
+ *         required: true
+ *         type: string
+ *       - name: experience_required
+ *         description: experience required.
+ *         in: formData
+ *         required: true
+ *         type: boolean
+ *       - name: technology
+ *         description: Technologies that vacancy requires.
+ *         in: formData
+ *         type: object
+ *         properties:
+ *          name:
+ *            type: string
+ *          level:
+ *            type: string
+ *     responses:
+ *      200:
+ *        description: "Vacancy created."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.post('/vacancy', passport.authenticated, vacancyController.store);
+
+/**
+ * @swagger
+ *
+ * /vacancy:
+ *   get:
+ *     tags:
+ *       - vacancy
+ *     summary: Show all vacancies
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Query OK."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/vacancy', passport.authenticated, vacancyController.index);
+
+/**
+ * @swagger
+ *
+ * /vacancy/{id}:
+ *   get:
+ *     tags:
+ *       - vacancy
+ *     summary: Get vacancy by id
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Vacancy ID.
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *      200:
+ *        description: "Vacancy created."
+ *      422:
+ *        description: "No vacancy with such id found."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/vacancy/:id', passport.authenticated, vacancyController.show);
+
+/**
+ * @swagger
+ *
+ * /vacancy/{id}:
+ *   put:
+ *     tags:
+ *       - vacancy
+ *     summary: Update vacancy
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Vacancy ID.
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *      200:
+ *        description: "Vacancy created."
+ *      400:
+ *        description: "Vacancy with such id not found."
+ *      401:
+ *        description: "Unauthorized."
+ *      500:
+ *        description: "Error updating vacancy."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.put('/vacancy/:id', passport.authenticated, vacancyController.update);
+
+/**
+ * @swagger
+ *
+ * /vacancy/{id}:
+ *   delete:
+ *     tags:
+ *       - vacancy
+ *     summary: Removes vacancy
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: id
+ *         description: Vacancy ID.
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *      204:
+ *        description: "Vacancy removed."
+ *      401:
+ *        description: "Unauthorized."
+ *      422:
+ *        description: "Invalid vacancy id."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.delete('/vacancy/:id', passport.authenticated, vacancyController.remove);
+
 
 
 

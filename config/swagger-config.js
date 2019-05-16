@@ -10,8 +10,13 @@ module.exports = {
     "basePath": "/api",
     "tags": [{
       "name": "user",
-      "description": "Operations about user"
-    }],
+      "description": "Operations with users"
+    },
+    {
+      "name": "vacancy",
+      "description": "Operations with vacancies"
+    },
+  ],
     "securityDefinitions": {
       "bearer-auth": {
         "type": "apiKey",
