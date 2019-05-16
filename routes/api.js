@@ -375,6 +375,52 @@ router.get('/vacancy', passport.authenticated, vacancyController.index);
 /**
  * @swagger
  *
+ * /vacancy/filter:
+ *   post:
+ *     tags:
+ *       - vacancy
+ *     summary: Show all vacancies by selected filters
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Query OK."
+ *      204:
+ *        description: "No vacancies found."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.post('/vacancy/filter', passport.authenticated, vacancyController.filter);
+
+
+/**
+ * @swagger
+ *
+ * /vacancy/search:
+ *   get:
+ *     tags:
+ *       - vacancy
+ *     summary: Show all vacancies by input search string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Query OK."
+ *      204:
+ *        description: "No vacancies found."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/vacancy/search', passport.authenticated, vacancyController.search);
+
+
+/**
+ * @swagger
+ *
  * /vacancy/{id}:
  *   get:
  *     tags:
