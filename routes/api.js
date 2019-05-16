@@ -323,6 +323,11 @@ router.get('/user/vacancies', passport.authenticated, userController.createdVaca
  *         in: formData
  *         required: true
  *         type: string
+ *       - name: email
+ *         description: Vacancy contact email.
+ *         in: formData
+ *         required: true
+ *         type: string
  *       - name: experience_required
  *         description: experience required.
  *         in: formData
@@ -426,6 +431,11 @@ router.get('/vacancy/:id', passport.authenticated, vacancyController.show);
  *         type: file
  *       - name: location
  *         description: Location of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: email
+ *         description: Vacancy contact email.
  *         in: formData
  *         required: false
  *         type: string

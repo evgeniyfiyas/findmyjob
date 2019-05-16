@@ -6,6 +6,7 @@ const vacancySchema = mongoose.Schema({
   location: String,
   logo: String,
   header: String,
+  email: String,
   technology: [{
     name : String,
     level : String

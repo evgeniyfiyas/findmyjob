@@ -26,6 +26,7 @@ exports.store = function (req, res) {
     let vacancy = new Vacancy({
       _id: new mongoose.Types.ObjectId(),
       user_created_id: req.user.id,
+      email: req.body.email,
       location: req.body.location,
       logo: 'http://' + host + '/api/uploads/' + logo_filename,
       header: req.body.header,
@@ -55,6 +56,7 @@ exports.update = function (req, res) {
       },
       {
         location: req.body.location,
+        email: req.body.email,
         logo: logo_filename,
         header: req.body.header,
         technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
