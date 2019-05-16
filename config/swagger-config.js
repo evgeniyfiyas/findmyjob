@@ -6,7 +6,7 @@ module.exports = {
       "version": "1.0.0",
       "description": "Node.js Express API for Find My Job website."
     },
-    "host": "localhost:3000",
+    "host": "36bda0f1.ngrok.io",
     "basePath": "/api",
     "tags": [{
       "name": "user",

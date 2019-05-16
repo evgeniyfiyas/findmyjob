@@ -58,6 +58,17 @@ exports.update = function (req, res) {
   });
 };
 
+
+exports.index = function (req, res) {
+  models.User.findAll().then(users => {
+    User.find({}).then(profiles => {
+      return res.status(200).json({users, profiles});
+    })
+  }).catch(err => {
+    return res.status(500).json({ errors: 'Error fetching users' });
+  });
+}
+
 exports.show = function (req, res) {
   models.User.findOne({
     where: { id: req.user.id }
