@@ -4,6 +4,7 @@ var registerController = require('../controllers/RegisterController');
 var loginController = require('../controllers/LoginController');
 var userController = require('../controllers/UserController');
 var vacancyController = require('../controllers/VacancyController');
+var technologyController = require('../controllers/TechnologyController');
 var technologySeeder = require('../seeders/mongodb-seeders/demo-technologies');
 const passport = require('../passport');
 
@@ -379,6 +380,25 @@ router.put('/vacancy/:id', passport.authenticated, vacancyController.update);
  */
 router.delete('/vacancy/:id', passport.authenticated, vacancyController.remove);
 
+/**
+ * @swagger
+ *
+ * /technology:
+ *   get:
+ *     tags:
+ *       - technology
+ *     summary: Show all technologies
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Query OK."
+ *      500:
+ *        description: "Internal server error."
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/technology', passport.authenticated, technologyController.index);
 
 
 

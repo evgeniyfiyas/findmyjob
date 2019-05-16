@@ -16,6 +16,10 @@ module.exports = {
       "name": "vacancy",
       "description": "Operations with vacancies"
     },
+    {
+      "name": "technology",
+      "description": "Operations with technologies"
+    },
   ],
     "securityDefinitions": {
       "bearer-auth": {
