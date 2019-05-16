@@ -22,6 +22,9 @@ var app = express();
 // enabling cors
 app.use(cors({credentials: true, origin: true}));
 
+// serve static files
+app.use('/api/uploads', express.static('public/uploads'));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');

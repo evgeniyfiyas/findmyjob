@@ -1,7 +1,7 @@
 const models = require('../models/mysql-models');
 const Vacancy = require('../models/mongo-models/vacancy');
 const mongoose = require('mongoose');
-
+const host = require('../config/swagger-config').swaggerDefinition.host;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 var jwt = require('jwt-simple');
@@ -13,11 +13,21 @@ exports.store = function (req, res) {
       id: req.user.id
     }
   }).then(user => {
+
+    // getting logo filename
+    let logo_filename;
+    if (req.file == undefined) {
+      logo_filename = "nologo.png";
+    }
+    else {
+      logo_filename = req.file.filename;
+    }
+
     let vacancy = new Vacancy({
       _id: new mongoose.Types.ObjectId(),
       user_created_id: req.user.id,
       location: req.body.location,
-      logo: req.body.logo,
+      logo: 'http://' + host + '/api/uploads/' + logo_filename,
       header: req.body.header,
       technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
       body: req.body.body,
@@ -33,12 +43,19 @@ exports.store = function (req, res) {
 }
 
 exports.update = function (req, res) {
+    let logo_filename;
+    if (req.file == undefined) {
+      logo_filename = undefined;
+    }
+    else {
+      logo_filename = 'http://' + host + '/api/uploads/' + req.file.filename;
+    }
     Vacancy.findOneAndUpdate({
         _id: req.params.id
       },
       {
         location: req.body.location,
-        logo: req.body.logo,
+        logo: logo_filename,
         header: req.body.header,
         technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
         body: req.body.body,
@@ -95,9 +112,11 @@ exports.remove = function (req, res) {
       if (req.user.id != vacancy.user_created_id) {
         return res.status(401).json({ errors: 'Unauthorized.' });
       }
-      vacancy.remove().then(() => {
-        return res.status(204).json();
-     });
+      else {
+        vacancy.remove().then(() => {
+          return res.status(204).json();
+        })
+      }
     }).catch(err => {
       console.log(err);
       return res.status(422).json({

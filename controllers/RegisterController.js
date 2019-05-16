@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 var mailer = require('../nodemailer');
 const User = require('../models/mongo-models/user');
+const host = require('../config/swagger-config').swaggerDefinition.host;
 
 
 exports.register = function(req, res) {
@@ -34,12 +35,21 @@ exports.register = function(req, res) {
       else
         console.log(info);
     });
-    
+
+    // getting avatar filename
+    let avatar_filename;
+    if (req.file == undefined) {
+      avatar_filename = "noavatar.png";
+    }
+    else {
+      avatar_filename = req.file.filename;
+    }
+
     let userProfile = new User({
       _id: user.id,
       firstname: req.body.firstname,
       lastname: req.body.lastname,
-      avatar: "null",
+      avatar: 'http://' + host + '/api/uploads/' + avatar_filename,
       age: req.body.age,
       phone: req.body.phone,
       technology: JSON.parse(req.body.technology),

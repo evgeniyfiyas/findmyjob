@@ -1,3 +1,4 @@
+var path = require('path')
 var express = require('express');
 var router = express.Router();
 var registerController = require('../controllers/RegisterController');
@@ -7,6 +8,19 @@ var vacancyController = require('../controllers/VacancyController');
 var technologyController = require('../controllers/TechnologyController');
 var technologySeeder = require('../seeders/mongodb-seeders/demo-technologies');
 const passport = require('../passport');
+var multer  = require('multer')
+
+var multer = require('multer');
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/')
+  },
+  filename: function (req, file, cb) {
+    console.log(file);
+    cb(null, Date.now() + path.extname(file.originalname))
+  }
+})
+var upload = multer({ storage: storage });
 
 /**
  * @swagger
@@ -44,6 +58,11 @@ const passport = require('../passport');
  *         in: formData
  *         required: true
  *         type: string
+ *       - name: avatar
+ *         description: User's avatar.
+ *         in: formData
+ *         required: false
+ *         type: file
  *       - name: age
  *         description: User's age.
  *         in: formData
@@ -89,7 +108,7 @@ const passport = require('../passport');
  *      422:
  *        description: "Validation error"
  */
-router.post('/user', registerController.validate, registerController.register);
+router.post('/user', upload.single('avatar'), registerController.validate, registerController.register);
 
 /**
  * @swagger
@@ -125,8 +144,62 @@ router.get('/user', passport.authenticated, userController.show);
  *       - name: password
  *         description: User's password.
  *         in: formData
- *         required: true
+ *         required: false
  *         type: string
+ *       - name: firstname
+ *         description: User's first name.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: lastname
+ *         description: User's last name.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: avatar
+ *         description: User's avatar.
+ *         in: formData
+ *         required: false
+ *         type: file
+ *       - name: age
+ *         description: User's age.
+ *         in: formData
+ *         required: false
+ *         type: integer
+ *       - name: phone
+ *         description: User's phone.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: technology
+ *         description: Technologies that user knows.
+ *         in: formData
+ *         type: object
+ *         properties:
+ *          name:
+ *            type: string
+ *          level:
+ *            type: string
+ *       - name: github_link
+ *         description: User's github link.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: bio
+ *         description: User's bio.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: location
+ *         description: User's location.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: looking_for_job
+ *         description: User's looking for job status.
+ *         in: formData
+ *         required: false
+ *         type: boolean
  *     responses:
  *      200:
  *        description: "User updated"
@@ -135,7 +208,7 @@ router.get('/user', passport.authenticated, userController.show);
  *     security:
  *      - bearer-auth: []
  */
-router.put('/user', passport.authenticated, userController.update);
+router.put('/user', passport.authenticated, upload.single('avatar'), userController.update);
 
 /**
  * @swagger
@@ -243,8 +316,8 @@ router.get('/user/vacancies', passport.authenticated, userController.createdVaca
  *       - name: logo
  *         description: Logo of vacancy.
  *         in: formData
- *         required: true
- *         type: string
+ *         required: false
+ *         type: file
  *       - name: location
  *         description: Location of vacancy.
  *         in: formData
@@ -272,7 +345,7 @@ router.get('/user/vacancies', passport.authenticated, userController.createdVaca
  *     security:
  *      - bearer-auth: []
  */
-router.post('/vacancy', passport.authenticated, vacancyController.store);
+router.post('/vacancy', passport.authenticated, upload.single('logo'), vacancyController.store);
 
 /**
  * @swagger
@@ -336,6 +409,40 @@ router.get('/vacancy/:id', passport.authenticated, vacancyController.show);
  *         in: path
  *         required: true
  *         type: string
+ *       - name: header
+ *         description: Header of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: body
+ *         description: Body text of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: logo
+ *         description: Logo of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: file
+ *       - name: location
+ *         description: Location of vacancy.
+ *         in: formData
+ *         required: false
+ *         type: string
+ *       - name: experience_required
+ *         description: experience required.
+ *         in: formData
+ *         required: false
+ *         type: boolean
+ *       - name: technology
+ *         description: Technologies that vacancy requires.
+ *         in: formData
+ *         type: object
+ *         properties:
+ *          name:
+ *            type: string
+ *          level:
+ *            type: string
  *     responses:
  *      200:
  *        description: "Vacancy created."
@@ -348,7 +455,7 @@ router.get('/vacancy/:id', passport.authenticated, vacancyController.show);
  *     security:
  *      - bearer-auth: []
  */
-router.put('/vacancy/:id', passport.authenticated, vacancyController.update);
+router.put('/vacancy/:id', passport.authenticated, upload.single('logo'), vacancyController.update);
 
 /**
  * @swagger

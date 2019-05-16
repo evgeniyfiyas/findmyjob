@@ -1,7 +1,7 @@
 const models = require('../models/mysql-models');
 const User = require('../models/mongo-models/user');
 const Vacancy = require('../models/mongo-models/vacancy');
-
+const host = require('../config/swagger-config').swaggerDefinition.host;
 const bcrypt = require('bcrypt');
 const passport = require('passport');
 var jwt = require('jwt-simple');
@@ -25,13 +25,20 @@ exports.update = function (req, res) {
     credentials.update({
       password: req.body.password || credentials.password
     }).then(credentials => {
+      let avatar_filename;
+      if (req.file == undefined) {
+        avatar_filename = undefined;
+      }
+      else {
+        avatar_filename = 'http://' + host + '/api/uploads/' + req.file.filename;
+      }
       User.findOneAndUpdate({
         _id: credentials.id,
       },
       {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
-        avatar: req.body.avatar,
+        avatar: avatar_filename,
         age: req.body.age,
         phone: req.body.phone,
         technology: req.body.technology === undefined ? "" : JSON.parse(req.body.technology),
