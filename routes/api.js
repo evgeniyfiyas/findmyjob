@@ -130,6 +130,27 @@ router.post('/user', upload.single('avatar'), registerController.validate, regis
  */
 router.get('/user', passport.authenticated, userController.show);
 
+
+/**
+ * @swagger
+ *
+ * /users:
+ *   get:
+ *     tags:
+ *       - user
+ *     summary: Fetch all user profiles
+ *     produces:
+ *       - application/json
+ *     responses:
+ *      200:
+ *        description: "Success"
+ *      500:
+ *        description: "Error fetching users"
+ *     security:
+ *      - bearer-auth: []
+ */
+router.get('/users', passport.authenticated, userController.index);
+
 /**
  * @swagger
  *
