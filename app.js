@@ -48,7 +48,7 @@ app.use(function(req, res, next) {
 })
 // Mongo db connection
 mongoose.connect(require('./config/migrate-mongo-config').fullPath, { useNewUrlParser: true }, err => {
-  if (err) return console.error(err);
+  if (err) return console.error("[ERROR] Unable to connect to mongodb!\n" + err);
   console.log("Successfully connected to mongodb");
 })
 
