@@ -11,6 +11,10 @@ Run
 
 inside the root folder.
 
+## Available routes
+
+    /api-docs
+
 ### Authors
 
 * **Eugeniy Fiyas** - *Initial work, Backend* - [evgeniyfiyas](https://github.com/evgeniyfiyas)
